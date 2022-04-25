@@ -1,0 +1,40 @@
+<%- include('../partials/head') %>
+<%- include('../partials/header') %>
+<body>
+    <div class="container">
+        <h2>View <%= petName %> Missing Details </h2>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">S/n</th>
+                <th scope="col">Pet Animal</th>
+                <th scope="col">Pet Name</th>
+                <th scope="col">Pet Description</th>
+                <th scope="col">Pet Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              <%
+              if(viewPet.length!=0){
+              var i=1;
+              viewPet.forEach(function(data){
+              %>
+              <tr>
+                  <td><%=i; %></td>
+                  <td><%=data.petanimal %></td>
+                  <td><%=data.petname %></td>
+                  <td><%=data.petdesc %></td>
+                  <td><%=data.petloc %></td>
+              </tr>
+              <%  i++; }) %>
+              <% } else{ %>
+                  <tr>
+                      <td colspan="7">No Data Found</td>
+                  </tr>
+              <% } %>
+            
+            </tbody>
+          </table>
+    </div>
+</body>
+<%- include('../partials/footer') %>
