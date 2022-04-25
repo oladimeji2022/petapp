@@ -52,6 +52,7 @@ app.get('/reports/:petId', async (req, res) => {
   const petId = req.params.petId;
   //get the reports from the database
   let query = 'Delete from petdetails where petid = '+Number(petId);
+  
   db.run(query, (err) => {
     if(err) throw err;
     res.render('pages/reports');
