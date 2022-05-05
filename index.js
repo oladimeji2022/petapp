@@ -28,34 +28,21 @@ const db = new sqlite3.Database('./pet.db', (err) => {
 //set the ejs view engine
 app.set('view engine', 'ejs');
 const path = require('path')
-app.set('views/pages', path.join(__dirname, 'views/pages'));
-app.use(express.static(path.join(__dirname, '/public')));
+app.set('views/', path.join(__dirname, 'views/'));
+app.use(express.static(path.join(__dirname, './public')));
 //Routes to Webpages
 //create the pages: For home Page
 app.get('/', (req, res) => {
-    res.render('pages/index');
+    res.render('index');
 })
-//for reports page
 app.get('/reports', async (req, res) => {
   //get the reports from the database
   let query = 'Select Distinct petanimal, petloc, petid from petdetails order by petid desc';
   db.all(query, (err, data) => {
     if(err) throw err;
-    console.log(data);
-    res.render('pages/reports', {
+    res.render('viewreports', {
         reports: data
     });
-  });
-})
-//Get missing reports with deletion of specific id
-app.get('/reports/:petId', async (req, res) => {
-  const petId = req.params.petId;
-  //get the reports from the database
-  let query = 'Delete from petdetails where petid = '+Number(petId);
-  
-  db.run(query, (err) => {
-    if(err) throw err;
-    res.render('pages/reports');
   });
 })
 //View Specific Pet Animal Reports Details
@@ -67,78 +54,155 @@ app.get('/viewpet/:petAnimal', async (req, res) => {
   db.all(query, (err, data) => {
     if(err) throw err;
     console.log(data);
-    res.render('pages/viewpet', { petName: petAnimal,
+    res.render('viewpet', { petName: petAnimal,
         viewPet: data
     });
   });
 })
- //A page to view all the missing pets details
-app.get('/report/:petId', async (req, res) => {
-  const petId = req.params.petId;
+ //A page to view single report of the missing pets details
+app.get('/report/:id', async (req, res) => {
+  const petId = req.params.id;
   //get the reports from the database
   let query = "Select p.petanimal,p.petname,p.petdesc,p.petloc,l.petarea,l.roadname from petdetails p, petlocation l where p.petid = '"+Number(petId)+"'and l.petid='"+Number(petId)+"' ";
   db.all(query, (err, data) => {
     if(err) throw err;
     console.log(data);
-    res.render('pages/viewmissing', { 
+    res.render('viewmissing', { 
         missingPet: data
     });
   });
 })
- //missing pet adding page
-app.get('/petmissing', (req, res) => {
-   //get the reports from the database
-   res.render('pages/petmissing',{data:{}});
-})
-//pet activities page
-app.get('/activities', (req, res) => {
+//missing pet adding page
+app.get('/reportpet', async (req, res) => {
   //get the reports from the database
-  res.render('pages/activities')
-})
-//save the new missing pet reports
-app.post('/addpet', async (req, res) => {
-  //get the details from the form
-  const petAnimal = req.body.petAnimal;
-  const petName = req.body.petName;
-  const petDesc = req.body.petDesc;
-  const petLoc = req.body.petLoc;
-  //check the validation now
-  req.checkBody('petAnimal', 'Pet Animal Name is required').notEmpty();
-  req.checkBody('petName', 'Pet Name is required').notEmpty();
-  req.checkBody('petDesc', 'Pet Description is required').notEmpty();
-  req.checkBody('petLoc', 'Pet location is required').notEmpty();
-  var errors = req.validationErrors();
-  if(errors)
-  {
-     res.render('pages/petmissing',{data:errors.array()});
-  }
-  else
-  {
-    //insert into query
-    await db.run('INSERT INTO petdetails(petanimal,petname,petdesc,petloc) values(?,?,?,?)',petAnimal,petName,petDesc,petLoc);
-    res.render('pages/reports')
-  }
+  res.render('reportpet');
 });
+//pet activities page
+app.get('/activities', async (req, res) => {
+ //get the reports from the database
+  res.render('pages/activities');
+});
+
 //create functions for each of the controller 
 //function missing pets reports json format
-const getMissingPet = (req,res) => {
-  res.send("Display All mising Pets");
+const getMissingPet = async (req, res) => {
+  try
+  {
+     //get the reports from the database
+    let query = 'Select Distinct * from petdetails order by petid desc';
+    db.all(query, (err, data) => {
+      if(err) {
+        return res.status(404).json({msg:err});
+      }
+      else if(!data)
+        {
+          return res.status(500).json({msg: `There is no any Pet Missing Reports`});
+        }
+      else 
+      {
+        //res.end(JSON.stringify(data));
+        res.status(200).json({data});
+      } 
+    });
+  }catch(error)
+  {
+     res.status(500).json({msg: error});
+  }
 }
-//function display single missing pets reports json format
-const getSingleMissingPet = (req,res) => {
-  res.send("Display All mising Pets");
+//function display API single missing pets reports in json format
+const getSingleMissingPet = async (req,res) => {
+  try {
+      const {id: petID} = req.params;
+      let query = "Select p.petanimal,p.petname,p.petdesc,p.petloc,l.petarea,l.roadname from petdetails p, petlocation l where p.petid = '"+Number(petID)+"'and l.petid='"+Number(petID)+"' ";
+      db.all(query, (err, data) => {
+        if(err) {
+          return res.status(404).json({msg:err});
+        }
+        else if(!data)
+        {
+          return res.status(404).json({msg: `No Missing Pet Reports with id : ${petID}`});
+        }
+        else 
+        {
+          //res.end(JSON.stringify(data));
+          res.status(200).json({data});
+        } 
+      });
+  }catch(error)
+  {
+    res.status(500).json({msg: error});
+  }
 }
 //function report new missing pet into database json format
-const saveMissingPet = (req,res) => {
-  res.send("Display All mising Pets");
+const saveMissingPet = async (req,res) => {
+  try{
+    const petAnimal = req.body.petAnimal;
+    const petName = req.body.petName;
+    const petDesc = req.body.petDesc;
+    const petLoc = req.body.petLoc;
+
+    const save = await db.run('INSERT INTO petdetails(petanimal,petname,petdesc,petloc) values(?,?,?,?)',petAnimal,petName,petDesc,petLoc);
+    if(!save) {
+      return res.status(500).json({msg: `Error Saving the Mising Report Into Database`});
+    } 
+    else 
+    {
+      return res.status(200).json({status: 'Success'});
+    }
+  }
+  catch(error){
+    res.status(500).json({msg: error});
+  }
 }
-//function delete a single report json format
-const deleteMissingPet = (req,res) => {
-  res.send("Display All mising Pets");
+//function delete a single API missing pet report with json response format
+const deleteMissingPet = async (req,res) => {
+  try{
+    const {id: petID} = req.params;
+    //get the reports from the database
+    const del = await db.run('Delete from petdetails where petid = '+Number(petID));
+    if(!del) {
+      return res.status(500).json({msg: `Error Deleting Mising Pet Report with id: ${petID}`});
+    } 
+    else 
+    {
+      return res.status(200).json({status: 'Success'});
+    } 
+  }catch(error)
+  {
+    res.status(500).json({msg: error});
+  }
 }
 //function Update the single missing pet 
-const updateMissingPet = (req,res) => {
-  res.send("Display All mising Pets");
+const updateMissingPet = async (req,res) => {
+  try{
+    const {id: petID} = req.params;
+    const petAnimal = req.body.petAnimal;
+    const petName = req.body.petName;
+    const petDesc = req.body.petDesc;
+    const petLoc = req.body.petLoc;
+    const update = await db.run('Update petdetails set petanimal = ?, petname = ?, petDesc=?, petLoc=? where petid = ?',petAnimal,petName,petDesc,petLoc,petID);
+    if(!update) {
+      return res.status(500).json({msg: `Error Updating Missing Pet Report with id: ${petID}`});
+    } 
+    else 
+    {
+      //let query = "Select * from petdetails where petid ="+Number(petID);
+      db.all('Select * from petdetails where petid ='+Number(petID), (err, data) => {
+        if(!data)
+        {
+          return res.status(500).json({msg: `No Missing Updating Pet Reports with id : ${petID}`});
+        }
+        else 
+        {
+          //res.end(JSON.stringify(data));
+          res.status(200).json({data});
+        } 
+      });
+    } 
+  }catch(error)
+  {
+
+  }
 }
 // initialise the api routes pages
 //routes to api pages

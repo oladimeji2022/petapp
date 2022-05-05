@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="stylesheet" href="/css/mainstyle.css" />
+   <title>View Missing Pets Report</title>
+ </head>
+ <body>
+   <nav class="navbar">
+     <!-- LOGO -->
+     <div class="logo">Mising Pet APP</div>
+     <!-- NAVIGATION MENU -->
+     <ul class="nav-links">
+       <!-- USING CHECKBOX HACK -->
+       <input type="checkbox" id="checkbox_toggle" />
+       <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+       <!-- NAVIGATION MENUS -->
+       <div class="menu">
+         <li><a href="/">Home</a></li>
+         <li><a href="/reports">Report Pets</a></li>
+         <li class="services">
+           <a href="/activites">Activities</a>
+         </li>
+       </div>
+     </ul>
+   </nav>
+   <div class="container">
+    <h2>View <%= petName %> Missing Details </h2>
+    <table id="reports">
+        <tr>
+            <th>S/n</th>
+            <th>Pet Animal</th>
+            <th>Pet Name</th>
+            <th>Pet Description</th>
+            <th>Pet Location</th>
+        </tr>
+        <%
+              if(viewPet.length!=0){
+              var i=1;
+              viewPet.forEach(function(data){
+              %>
+              <tr>
+                  <td><%=i; %></td>
+                  <td><%=data.petanimal %></td>
+                  <td><%=data.petname %></td>
+                  <td><%=data.petdesc %></td>
+                  <td><%=data.petloc %></td>
+              </tr>
+              <%  i++; }) %>
+              <% } else{ %>
+                  <tr>
+                      <td colspan="7">No Data Found</td>
+                  </tr>
+              <% } %>
+            
+      </table>
+   </div>
+ </body>
+</html>

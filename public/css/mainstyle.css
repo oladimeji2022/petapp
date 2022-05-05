@@ -1,0 +1,209 @@
+/* UTILITIES */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   }
+   body {
+    overflow: scroll;
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+   }
+   a {
+    text-decoration: none;
+   }
+   li {
+    list-style: none;
+   }
+   form
+   {
+    display: block;
+    margin-top: 0em;
+   }
+   .reportdiv {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+  }
+  input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    background-color: #45a049;
+  }
+  
+   .form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+   .navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background-color: #212529;
+    color: #fff;
+   }
+   .nav-links a {
+    color: #fff;
+   }
+   /* LOGO */
+   .logo {
+    font-size: 32px;
+   }
+   .container 
+   {
+    width: 100%;
+    padding-right: 45pt;
+    padding-left: 45pt;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 10pt;
+   }
+   /* NAVBAR MENU */
+   .menu {
+    display: flex;
+    gap: 1em;
+    font-size: 18px;
+   }
+   .menu li:hover {
+    background-color: #4c9e9e;
+    border-radius: 5px;
+    transition: 0.3s ease;
+   }
+   .menu li {
+    padding: 5px 14px;
+   }
+   /* DROPDOWN MENU */
+   .services {
+    position: relative; 
+   }
+   .dropdown {
+    background-color: rgb(1, 139, 139);
+    padding: 1em 0;
+    position: absolute; /*WITH RESPECT TO PARENT*/
+    display: none;
+    border-radius: 8px;
+    top: 35px;
+   }
+   .dropdown li + li {
+    margin-top: 10px;
+   }
+   .dropdown li {
+    padding: 0.5em 1em;
+    width: 8em;
+    text-align: center;
+   }
+   .dropdown li:hover {
+    background-color: #4c9e9e;
+   }
+   .services:hover .dropdown {
+    display: block;
+   }
+   #reports {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  #reports td, #customers th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #reports tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #reports tr:hover {background-color: #ddd;}
+  
+  #reports th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #04AA6D;
+    color: white;
+  }
+   /*RESPONSIVE NAVBAR MENU STARTS*/
+/* CHECKBOX HACK */
+input[type=checkbox]{
+ display: none;
+} 
+/*HAMBURGER MENU*/
+.hamburger {
+ display: none;
+ font-size: 24px;
+ user-select: none;
+}
+/* APPLYING MEDIA QUERIES */
+@media (max-width: 768px) {
+    .menu { 
+    display:none;
+    position: absolute;
+    background-color:teal;
+    right: 0;
+    left: 0;
+    text-align: center;
+    padding: 16px 0;
+    }
+    .menu li:hover {
+    display: inline-block;
+    background-color:#4c9e9e;
+    transition: 0.3s ease;
+    }
+    .menu li + li {
+    margin-top: 12px;
+    }
+    input[type=checkbox]:checked ~ .menu{
+    display: block;
+    }
+    .hamburger {
+    display: block;
+    }
+    .dropdown {
+    left: 50%;
+    top: 30px;
+    transform: translateX(35%);
+    }
+    .dropdown li:hover {
+    background-color: #4c9e9e;
+    }
+    .container 
+   {
+    width: 100%;
+    padding-right: 0.75pt;
+    padding-left: 0.75pt;
+    margin-right: auto;
+    margin-left: auto;
+    padding-top: 2pt;
+   }
+}
