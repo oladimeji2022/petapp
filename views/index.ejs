@@ -6,6 +6,50 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <link rel="stylesheet" href="/css/mainstyle.css" />
    <title>Missing Pets Report App</title>
+   <script src="/js/jquery.min.js"></script>
+   <script>
+     $(document).ready(function(){
+            $("#search-report").on("change", function(event){
+              event.preventDefault();
+              //get the ajax stuff now
+                GetBindData();
+            });
+      });
+      function GetBindData()
+      {
+        const searchName = $("#search-report").val();
+        $("#disSearch").empty();
+        $.ajax({
+          url: 'http://localhost:5000/api/reports/' + searchName,
+          method: 'GET',
+          contentType: "application/json; charset=utf-8",
+          dataType: 'json',
+          success: function(res) 
+          {
+            if(res.data !=null && res.data.length > 0 )
+            {
+              var t = 0;
+              for(var i = 0; i < res.data.length; i++)
+              {
+                t = i+1;
+                var tableRow = "<tr>"
+                                  + "<td>" + t + "</td>"
+                                  + "<td>" + res.data[i].petanimal + "</td>"
+                                  + "<td>" + res.data[i].petname + "</td>" 
+                                  + "<td>" + res.data[i].petdesc + "</td>"
+                                  + "<td>" + res.data[i].petloc + "</td>" 
+                                  + "<td> <a href='/report/"+ res.data[i].petid +"'> View Details"+ "</a></td>" 
+                                  + "</tr>";
+                  $("#disSearch").append(tableRow);
+              }
+            }
+          },
+          error: function(error) {
+            console.log(error);
+          }
+        });
+      }
+    </script>
  </head>
  <body>
    <nav class="navbar">
@@ -21,7 +65,7 @@
          <li><a href="/">Home</a></li>
          <li><a href="/reports">Report Pets</a></li>
          <li class="services">
-           <a href="/activities">Activities</a>
+           <a href="/activities">Activity</a>
            <!-- DROPDOWN MENU -->
            <!--
            <ul class="dropdown">
@@ -35,11 +79,10 @@
            <!-- end Drop Down Menu-->
          </li>
          <li><form>
-          <input type="search" class="form-control form-control-dark" placeholder="Search..." aria-label="Search">
+          <input type="search" class="form-control" placeholder="Search Pet Animal..." aria-label="Search" id="search-report" >
         </form></li>
        </div>
      </ul>
-     
    </nav>
    <div class="container">
      <h1>Missing or Lost Pets Application</h1>
@@ -48,6 +91,27 @@
             owners to report a missing pet by clicking on reports page and also allows other to report any possible sighting
             of the said Pet.
        </p>
+   </div>
+   <div class="container">
+    <h2>View Missing Pet Reports </h2>
+    <table id="reports">
+      <thead>
+        <tr>
+            <th>S/N</th>
+            <th>Pet Animal</th>
+            <th>Pet Name</th>
+            <th>Pet Description</th>
+            <th>Pet Location</th>
+            <th>Action</th>
+            
+        </tr>
+      </thead>
+      <tbody id="disSearch">
+  
+      </tbody>
+        
+
+      </table>
    </div>
  </body>
 </html>

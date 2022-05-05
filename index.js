@@ -80,7 +80,7 @@ app.get('/reportpet', async (req, res) => {
 //pet activities page
 app.get('/activities', async (req, res) => {
  //get the reports from the database
-  res.render('pages/activities');
+  res.render('activities');
 });
 
 //create functions for each of the controller 
@@ -125,6 +125,30 @@ const getSingleMissingPet = async (req,res) => {
         else 
         {
           //res.end(JSON.stringify(data));
+          res.status(200).json({data});
+        } 
+      });
+  }catch(error)
+  {
+    res.status(500).json({msg: error});
+  }
+}
+//function display API single missing pets reports in json format
+const getSearchReport = async (req,res) => {
+  try {
+      const {id: petAnimal} = req.params;
+      let query = "Select * from petdetails where petanimal LIKE '%"+ petAnimal +"%' ";
+      db.all(query, (err, data) => {
+        if(err) {
+          return res.status(404).json({msg:err});
+        }
+        else if(!data)
+        {
+          return res.status(404).json({msg: `No Missing Pet Details with Details : ${petAnimal}`});
+        }
+        else 
+        {
+          
           res.status(200).json({data});
         } 
       });
@@ -210,6 +234,8 @@ const reportRouter = express.Router();
 //API to get all the pets reports
 reportRouter.route('/reports')
    .get(getMissingPet)
+reportRouter.route('/reports/:id')
+   .get(getSearchReport)
 reportRouter.route('/report/:id')
    .get(getSingleMissingPet)
 reportRouter.route('/report')

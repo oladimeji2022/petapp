@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+   <meta charset="UTF-8" />
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <link rel="stylesheet" href="/css/mainstyle.css" />
+   <title>Activities Page</title>
+   <script src="/js/jquery.min.js"></script>
+   <script>
+       var imgObj = null;
+       var animate ;
+       var width = $(window).width();
+       var height = $(window).height();
+            function init() {
+               imgObj = document.getElementById('dogImage');
+               imgObj.style.position= 'relative'; 
+               imgObj.style.left = '0px'; 
+            }
+            function moveRight() 
+            {
+               var speed = $("#speed").val();
+               if(speed == "")
+               {
+                   alert('Enter Animation Speed in milliseconds e.g 5000 is 5secs');
+               }
+               else
+               {
+                    imgObj.style.left = parseInt(imgObj.style.left) + 10 + 'px';
+                    animate = setTimeout(moveRight, parseInt(speed));    // call moveRight in 20msec
+                }
+            }
+            function goRight() {
+                var speed = $("#speed").val();
+               if(speed == "")
+               {
+                   alert('Enter Animation Speed');
+               }
+               else
+               {
+                    $("#dogImage").animate({
+                    left: width
+                    }, parseInt(speed), function() {
+                        setTimeout(goLeft, 50);
+                    });
+                }
+            }
+            function goLeft() {
+                var speed = $("#speed").val();
+                $("#dogImage").animate({
+                left: 0
+                }, parseInt(speed), function() {
+                    setTimeout(goRight, 50);
+                });
+            }
+            function stop() {
+                $("#dogImage").stop(true);
+                $("#dogImage").css('left', 0);
+            }
+   window.onload = init;
+   </script>
+ </head>
+ <body>
+   <nav class="navbar">
+     <!-- LOGO -->
+     <div class="logo">Mising Pet APP</div>
+     <!-- NAVIGATION MENU -->
+     <ul class="nav-links">
+       <!-- USING CHECKBOX HACK -->
+       <input type="checkbox" id="checkbox_toggle" />
+       <label for="checkbox_toggle" class="hamburger">&#9776;</label>
+       <!-- NAVIGATION MENUS -->
+       <div class="menu">
+         <li><a href="/">Home</a></li>
+         <li><a href="/reports">Report Pets</a></li>
+         <li class="services">
+           <a href="/activities">Activity</a>
+         </li>
+       </div>
+     </ul>
+   </nav>
+   <div class="container">
+    <h2>Activities Page</h2>
+    <form>
+        <img id = "dogImage" src = "/images/dog.gif" width="100px" height="100px" />
+        <p>Click the buttons below to handle animation</p>
+        <label for="speed">Enter Animal Speed</label><br/>
+        <input type="text" id="speed" name="speed" style="width: 20%;"><br/>
+        <input type = "button" value = "Start" onclick = "goRight();" />
+        <input type = "button" value = "Stop" onclick = "stop();" />
+    </form>
+   </div>
+ </body>
+</html>
