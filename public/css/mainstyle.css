@@ -19,11 +19,29 @@
     display: block;
     margin-top: 0em;
    }
+   p {
+    font-size: 20px; 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: justify; 
+    padding-right: 20px;
+   }
    .reportdiv {
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 20px;
   }
+  section {
+    height:70vh;
+    width: 100%;
+    background-position:center;
+    background-repeat: no-repeat;
+    background-size: cover;
+   background-attachment: fixed;
+}
+.petImage {
+    background-image: url("/images/petsone.jpg")
+}
+ 
   input[type=text], select {
     width: 100%;
     padding: 12px 20px;
@@ -114,39 +132,13 @@
    .menu li {
     padding: 5px 14px;
    }
-   /* DROPDOWN MENU */
-   .services {
-    position: relative; 
-   }
-   .dropdown {
-    background-color: rgb(1, 139, 139);
-    padding: 1em 0;
-    position: absolute; /*WITH RESPECT TO PARENT*/
-    display: none;
-    border-radius: 8px;
-    top: 35px;
-   }
-   .dropdown li + li {
-    margin-top: 10px;
-   }
-   .dropdown li {
-    padding: 0.5em 1em;
-    width: 8em;
-    text-align: center;
-   }
-   .dropdown li:hover {
-    background-color: #4c9e9e;
-   }
-   .services:hover .dropdown {
-    display: block;
-   }
    #reports {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
     margin-top: 10px;
+    overflow-x:auto;
   }
-  
   #reports td, #customers th {
     border: 1px solid #ddd;
     padding: 8px;

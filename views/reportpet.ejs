@@ -20,10 +20,10 @@
             }
             else {
                 const petdetails = {
-                petAnimal: $("#petAnimal").val(),
-                petName: $("#petName").val(),
-                petDesc: $("#petDesc").val(),
-                petLoc: $("#petLoc").val()
+                petAnimal: document.forms["reportForm"]["petAnimal"].value,
+                petName: document.forms["reportForm"]["petName"].value,
+                petDesc: document.forms["reportForm"]["petDesc"].value,
+                petLoc: document.forms["reportForm"]["petLoc"].value
             }
             $.ajax({
                     url: 'http://localhost:5000/api/report/',
@@ -53,14 +53,14 @@
  </head>
  <body>
    <nav class="navbar">
-     <!-- LOGO -->
+     
      <div class="logo">Mising Pet APP</div>
-     <!-- NAVIGATION MENU -->
+     
      <ul class="nav-links">
-       <!-- USING CHECKBOX HACK -->
+       
        <input type="checkbox" id="checkbox_toggle" />
        <label for="checkbox_toggle" class="hamburger">&#9776;</label>
-       <!-- NAVIGATION MENUS -->
+       
        <div class="menu">
          <li><a href="/">Home</a></li>
          <li><a href="/reports">Report Pets</a></li>

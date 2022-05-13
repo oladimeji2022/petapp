@@ -6,21 +6,19 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <link rel="stylesheet" href="/css/mainstyle.css" />
    <title>Missing Pets Report App</title>
-   <script src="/js/jquery.min.js"></script>
+   <script src="/js/javafile.js"></script>
    <script>
-     $(document).ready(function(){
-            $("#search-report").on("change", function(event){
-              event.preventDefault();
-              //get the ajax stuff now
-                GetBindData();
-            });
-      });
-      function GetBindData()
-      {
-        const searchName = $("#search-report").val();
-        $("#disSearch").empty();
+    function showAjaxResult(event)
+    {
+      event.preventDefault();
+      GetBindData();  
+    }
+    function GetBindData()
+    {
+        const search = document.getElementById("report-search").value;
+        removeBody();
         $.ajax({
-          url: 'http://localhost:5000/api/reports/' + searchName,
+          url: 'http://localhost:5000/api/reports/' + search,
           method: 'GET',
           contentType: "application/json; charset=utf-8",
           dataType: 'json',
@@ -49,45 +47,36 @@
           }
         });
       }
+      function removeBody() {
+          console.log("clearing table")
+        var Table = document.getElementById("disSearch");
+        Table.innerHTML = "";
+      }
     </script>
  </head>
  <body>
    <nav class="navbar">
-     <!-- LOGO -->
-     <div class="logo">Mising Pet APP</div>
-     <!-- NAVIGATION MENU -->
-     <ul class="nav-links">
-       <!-- USING CHECKBOX HACK -->
+    <div class="logo">Mising Pet APP</div>
+    <ul class="nav-links">
        <input type="checkbox" id="checkbox_toggle" />
        <label for="checkbox_toggle" class="hamburger">&#9776;</label>
-       <!-- NAVIGATION MENUS -->
        <div class="menu">
          <li><a href="/">Home</a></li>
          <li><a href="/reports">Report Pets</a></li>
-         <li class="services">
+         <li>
            <a href="/activities">Activity</a>
-           <!-- DROPDOWN MENU -->
-           <!--
-           <ul class="dropdown">
-             <li><a href="/">Dropdown 1 </a></li>
-             <li><a href="/">Dropdown 2</a></li>
-             <li><a href="/">Dropdown 2</a></li>
-             <li><a href="/">Dropdown 3</a></li>
-             <li><a href="/">Dropdown 4</a></li>
-           </ul>
-          -->
-           <!-- end Drop Down Menu-->
          </li>
          <li><form>
-          <input type="search" class="form-control" placeholder="Search Pet Animal..." aria-label="Search" id="search-report" >
+          <input type="search" class="form-control" placeholder="Search Pet Animal..." aria-label="Search" id="report-search" onchange="showAjaxResult(event)" >
         </form></li>
        </div>
      </ul>
    </nav>
    <div class="container">
      <h1>Missing or Lost Pets Application</h1>
-        <img style="background-position: center;  background-size: cover; padding-bottom: 30px;" src="images/petsone.jpg" alt="Missing Pets or Lost Pet" />
-        <p style="font-size: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;text-align: justify; padding-right: 20px;"> Welcome to a website that attempts to reunite owners with their missing or lost pets. This website allows
+      <section class="petImage">
+      </section>
+        <p> Welcome to a website that attempts to reunite owners with their missing or lost pets. This website allows
             owners to report a missing pet by clicking on reports page and also allows other to report any possible sighting
             of the said Pet.
        </p>
